@@ -1,0 +1,38 @@
+{
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.0.12",
+    "@tanstack/react-query": "^5.67.2",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.8.2",
+    "next": "^13.x.x",
+    "postcss": "^8.5.3",
+    "react": "^18.x.x",
+    "react-dom": "^18.x.x",
+    "tailwindcss": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.10",
+    "@types/react": "^18.x.x",
+    "@types/react-dom": "^18.x.x",
+    "@typescript-eslint/eslint-plugin": "^6.x.x",
+    "@typescript-eslint/parser": "^6.x.x",
+    "eslint": "^8.x.x",
+    "eslint-config-prettier": "^8.x.x",
+    "eslint-plugin-prettier": "^4.x.x",
+    "prettier": "^3.x.x",
+    "typescript": "^5.x.x"
+  },
+  "author": "",
+  "license": "ISC"
+}
