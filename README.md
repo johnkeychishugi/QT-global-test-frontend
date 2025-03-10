@@ -37,7 +37,7 @@ A modern URL shortening application built with Next.js and React that allows use
 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd QT-global-test/frontend
+cd QT-global-test-frontend
 ```
 
 2. Install dependencies
