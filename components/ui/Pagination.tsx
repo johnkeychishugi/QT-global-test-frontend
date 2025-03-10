@@ -7,34 +7,100 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-    }
-  };
+  if (totalPages <= 1) return null;
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+  const renderPageButtons = () => {
+    const buttons = [];
+    const maxVisiblePages = 5;
+    
+    // Logic to show limited page buttons with ellipsis for many pages
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
+    
+    // First page
+    if (startPage > 1) {
+      buttons.push(
+        <button
+          key={1}
+          onClick={() => onPageChange(1)}
+          className="px-3 py-1 rounded-md bg-white border hover:bg-gray-50"
+        >
+          1
+        </button>
+      );
+      
+      if (startPage > 2) {
+        buttons.push(<span key="start-ellipsis" className="px-2">...</span>);
+      }
+    }
+    
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => onPageChange(i)}
+          className={`px-3 py-1 rounded-md ${
+            currentPage === i
+              ? 'bg-indigo-600 text-white'
+              : 'bg-white border text-indigo-500 hover:bg-gray-50'
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    
+    // Last page
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        buttons.push(<span key="end-ellipsis" className="px-2">...</span>);
+      }
+      
+      buttons.push(
+        <button
+          key={totalPages}
+          onClick={() => onPageChange(totalPages)}
+          className="px-3 py-1 rounded-md bg-white border text-indigo-500 hover:bg-gray-50"
+        >
+          {totalPages}
+        </button>
+      );
+    }
+    
+    return buttons;
   };
 
   return (
-    <div className="flex justify-between items-center mt-4">
+    <div className="flex justify-center items-center space-x-2">
       <button
-        onClick={handlePrevious}
+        onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="bg-blue-500 text-white rounded p-2 disabled:opacity-50"
+        className={`px-3 py-1 rounded-md ${
+          currentPage === 1
+            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+            : 'bg-white border text-indigo-500 hover:bg-gray-50'
+        }`}
       >
         Previous
       </button>
-      <span>
-        Page {currentPage} of {totalPages}
-      </span>
+      
+      <div className="flex items-center space-x-2">
+        {renderPageButtons()}
+      </div>
+      
       <button
-        onClick={handleNext}
+        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="bg-blue-500 text-white rounded p-2 disabled:opacity-50"
+        className={`px-3 py-1 rounded-md ${
+          currentPage === totalPages
+            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+            : 'bg-white border text-indigo-500 hover:bg-gray-50'
+        }`}
       >
         Next
       </button>

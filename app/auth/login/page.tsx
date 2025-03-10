@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
+import SocialLogin from '@/components/auth/SocialLogin';
 
 export default function LoginPage() {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -20,7 +21,7 @@ export default function LoginPage() {
 
     try {
       await login(emailOrUsername, password);
-      router.push('/dashboard');
+      router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
@@ -78,8 +79,10 @@ export default function LoginPage() {
             </button>
           </div>
 
+          <SocialLogin />
+
           <div className="text-sm text-center">
-            <p>
+            <p className="text-gray-500">
               Don&apos;t have an account?{' '}
               <Link href="/auth/register" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Sign up

@@ -12,8 +12,9 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   login: (emailOrUsername: string, password: string) => Promise<void>;
-  register: (email: string, username: string, password: string) => Promise<void>;
+  register: (email: string, username: string, password: string, name?: string) => Promise<void>;
   logout: () => Promise<void>;
+  loginWithToken: (token: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -58,18 +59,19 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
       const userResponse = await api.get('/users/me');
       setUser(userResponse.data);
-      router.push('/dashboard');
+      router.push('/');
     } catch (error) {
       throw error;
     }
   };
 
-  const register = async (email: string, username: string, password: string) => {
+  const register = async (email: string, username: string, password: string, name?: string) => {
     try {
       const { data } = await api.post('/auth/register', {
         email,
         username,
         password,
+        name,
       });
       
       localStorage.setItem('accessToken', data.accessToken);
@@ -78,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       const userResponse = await api.get('/users/me');
       setUser(userResponse.data);
       
-      router.push('/dashboard');
+      router.push('/');
     } catch (error) {
       throw error;
     }
@@ -95,6 +97,19 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     } 
   };
 
+  const loginWithToken = async (token: string) => {
+    try {
+      localStorage.setItem('accessToken', token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
+      const userResponse = await api.get('/users/me');
+      setUser(userResponse.data);
+    } catch (error) {
+      console.error('Login with token error:', error);
+      localStorage.removeItem('accessToken');
+    }
+  };
+
   // Fetch user data
   const { data: userData, isLoading } = useQuery({
     queryKey: ['user'],
@@ -106,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   // Return the context provider instead of an object
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, loginWithToken }}>
       {children}
     </AuthContext.Provider>
   );

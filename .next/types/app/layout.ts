@@ -1,4 +1,4 @@
-// File: C:\Users\Lemoisson\Desktop\projects\Muchachu\frontend\app\layout.tsx
+// File: /Applications/MAMP/htdocs/QT-global-test/frontend/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

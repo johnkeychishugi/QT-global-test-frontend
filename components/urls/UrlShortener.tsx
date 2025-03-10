@@ -1,3 +1,4 @@
+import api from '@/lib/api';
 import { useState } from 'react';
 
 interface UrlShortenerProps {
@@ -6,6 +7,7 @@ interface UrlShortenerProps {
 
 const UrlShortener: React.FC<UrlShortenerProps> = ({ onSuccess }) => {
   const [url, setUrl] = useState('');
+  const [customCode, setCustomCode] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,11 +16,15 @@ const UrlShortener: React.FC<UrlShortenerProps> = ({ onSuccess }) => {
 
     try {
       // Replace with your API call to shorten the URL
-      await api.post('/urls/shorten', { url });
+      await api.post('/shorten', { 
+        longUrl: url,
+        customCode: customCode || undefined 
+      });
       onSuccess();
       setUrl('');
-    } catch (err) {
-      setError('Failed to shorten URL');
+      setCustomCode('');
+    } catch (err: any) {
+      setError(err?.response?.data?.message || 'Failed to shorten URL');
     }
   };
 
@@ -29,11 +35,18 @@ const UrlShortener: React.FC<UrlShortenerProps> = ({ onSuccess }) => {
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         placeholder="Enter URL to shorten"
-        className="border rounded p-2"
+        className="border border-gray-300 rounded p-2 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
         required
       />
+      <input
+        type="text"
+        value={customCode}
+        onChange={(e) => setCustomCode(e.target.value)}
+        placeholder="Custom code (optional)"
+        className="border border-gray-300 rounded p-2 text-gray-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+      />
       {error && <div className="text-red-500">{error}</div>}
-      <button type="submit" className="bg-blue-500 text-white rounded p-2">
+      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white rounded p-2">
         Shorten URL
       </button>
     </form>
