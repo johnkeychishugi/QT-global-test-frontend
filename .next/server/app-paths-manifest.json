@@ -1,6 +1,1 @@
-{
-  "/page": "app/page.js",
-  "/auth/social-callback/page": "app/auth/social-callback/page.js",
-  "/auth/login/page": "app/auth/login/page.js",
-  "/analytics/[shortCode]/page": "app/analytics/[shortCode]/page.js"
-}
+{}
